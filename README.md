@@ -136,9 +136,14 @@ SD:
 #### How to give 3 `X` with 100% chance and 2 `X` with 20% chance?
 > Simple, just add two fields with the same item name, but different chance and quantity.
 
+#### How to disable the broadcast(s)?
+> Set `car/chopper_broadcast` to `Null`
+
 #### How to disable one of the drops?
-> For Chaos Insurgency set the `time_difference` value to a very high one.
-> For MTF use the `chopper_time` value instead.
+> For Chaos Insurgency set the `car_time` value to a very high one.
+> <br>For MTF use the `chopper_time` value instead. 
+> <br>Currently, you can't disable the chopper and leave the car enabled.
+> <br>You can leave time_difference on normal values, that will allow the chopper to spawn more than once with car being disabled.
 
 #### How to get rid of the time difference between chopper and car?
 > Set the `time_difference` value to `1`. Not `-1`, not `0`, just `1`.
