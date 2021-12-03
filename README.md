@@ -1,4 +1,4 @@
-[![Exiled Framework](https://cdn.discordapp.com/attachments/880982483213111356/880982665178808410/developed-for-exiled-3.0.svg)](https://discord.gg/C4fMYF)[![SCP: Secret Laboratory](https://cdn.discordapp.com/attachments/880982483213111356/880984656705630238/for_-scp_-secret-laboratory.svg)](https://scpslgame.com/)
+[![Exiled Framework](https://cdn.discordapp.com/attachments/880982483213111356/916274727214010368/developer-using-exiled-4.0.svg)](https://discord.gg/C4fMYF)[![SCP: Secret Laboratory](https://cdn.discordapp.com/attachments/880982483213111356/880984656705630238/for_-scp_-secret-laboratory.svg)](https://scpslgame.com/)
 
 # Supply-Drop
 Supply Drop is an Exiled plugin that makes the chopper and car drop supplies at the surface at the designated time.
