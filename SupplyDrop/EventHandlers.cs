@@ -20,32 +20,6 @@ namespace SupplyDrop
         private readonly SupplyDrop pl;
         public EventHandlers(SupplyDrop plugin) => this.pl = plugin;
 
-        private bool debug = SupplyDrop.Singleton.Config.Debug;
-
-        private int minPlayers = SupplyDrop.Singleton.Config.MinPlayers;
-
-        private List<DropItems> chopper_items = SupplyDrop.Singleton.Config.MtfItems;
-        private List<DropItems> car_items = SupplyDrop.Singleton.Config.ChaosItems;
-
-        private int chopper_time = SupplyDrop.Singleton.Config.ChopperTime;
-        private string chopper_dropText = SupplyDrop.Singleton.Config.ChopperBroadcast;
-        private ushort chopper_bcTime = SupplyDrop.Singleton.Config.ChopperBroadcastTime;
-        private int chopper_dropLimit = SupplyDrop.Singleton.Config.ChopperDropsLimit;
-        private Vector3 chopper_pos_ammo = SupplyDrop.Singleton.Config.ChopperPosAmmo;
-        private Vector3 chopper_pos_armors = SupplyDrop.Singleton.Config.ChopperPosArmors;
-        private Vector3 chopper_pos_items = SupplyDrop.Singleton.Config.ChopperPosItems;
-        private Vector3 chopper_pos_weapons = SupplyDrop.Singleton.Config.ChopperPosWeapons;
-
-        private int car_time = SupplyDrop.Singleton.Config.CarTime;
-        private int car_time_difference = SupplyDrop.Singleton.Config.TimeDifference;
-        private string car_dropText = SupplyDrop.Singleton.Config.CarBroadcast;
-        private ushort car_bcTime = SupplyDrop.Singleton.Config.CarBroadcastTime;
-        private int car_dropLimit = SupplyDrop.Singleton.Config.CarDropsLimit;
-        private Vector3 car_pos_ammo = SupplyDrop.Singleton.Config.CarPosAmmo;
-        private Vector3 car_pos_armors = SupplyDrop.Singleton.Config.CarPosArmors;
-        private Vector3 car_pos_items = SupplyDrop.Singleton.Config.CarPosItems;
-        private Vector3 car_pos_weapons = SupplyDrop.Singleton.Config.CarPosWeapons;
-
         private int chopper_dropsNumber = 0;
         private int car_dropsNumber = 0;
 
@@ -73,20 +47,20 @@ namespace SupplyDrop
         {
             while (Round.IsStarted)
             {
-                if ((Server.PlayerCount >= minPlayers) && ((chopper_dropLimit == -1) || (chopper_dropLimit > chopper_dropsNumber)))
+                if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.ChopperDropsLimit == -1) || (pl.Config.ChopperDropsLimit > chopper_dropsNumber)))
                 {
-                    yield return Timing.WaitForSeconds(chopper_time); // Wait seconds (10 minutes by default)
+                    yield return Timing.WaitForSeconds(pl.Config.ChopperTime); // Wait seconds (10 minutes by default)
                     Log.Info("Spawning chopper!");
 
                     RespawnEffectsController.ExecuteAllEffects(RespawnEffectsController.EffectType.Selection, SpawnableTeamType.NineTailedFox);
 
-                    Map.Broadcast(chopper_bcTime, chopper_dropText);
+                    Map.Broadcast(pl.Config.ChopperBroadcastTime, pl.Config.ChopperBroadcast);
 
                     yield return Timing.WaitForSeconds(15); // Wait 15 seconds
 
                     Vector3 spawn = Exiled.API.Extensions.RoleExtensions.GetRandomSpawnProperties(RoleType.NtfPrivate).Item1;
 
-                    if (chopper_items == null)
+                    if (pl.Config.MtfItems == null)
                     {
                         Log.Warn("MtfItems config is null. Check your config for any errors.");
                         break;
@@ -95,17 +69,17 @@ namespace SupplyDrop
                     //Thanks to JesusQC for his help with making the entire plugin work. Love you
                     //Honorable mention - sanyae2439 for "hell code".
                     System.Random random = Exiled.Loader.Loader.Random;
-                    foreach (var dropItems in chopper_items) 
+                    foreach (var dropItems in pl.Config.MtfItems) 
                     {
                         int spawned = 0;
                         Item item = new Item(dropItems.Item);
-                        if (ItemExtensions.IsAmmo(item.Type) && (chopper_pos_ammo != Vector3.zero)) spawn = chopper_pos_ammo;
-                        if (ItemExtensions.IsArmor(item.Type) && (chopper_pos_armors != Vector3.zero)) spawn = chopper_pos_armors;
-                        if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (chopper_pos_items != Vector3.zero)) spawn = chopper_pos_items;
-                        if (ItemExtensions.IsWeapon(item.Type, true) || ItemExtensions.IsThrowable(item.Type) && (chopper_pos_weapons != Vector3.zero)) spawn = chopper_pos_weapons;
-                        Log.Debug($"Coordinates choosed for {dropItems.Item} - {spawn}", debug);
+                        if (ItemExtensions.IsAmmo(item.Type) && (pl.Config.ChopperPosAmmo != Vector3.zero)) spawn = pl.Config.ChopperPosAmmo;
+                        if (ItemExtensions.IsArmor(item.Type) && (pl.Config.ChopperPosArmors != Vector3.zero)) spawn = pl.Config.ChopperPosArmors;
+                        if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (pl.Config.ChopperPosItems != Vector3.zero)) spawn = pl.Config.ChopperPosItems;
+                        if (ItemExtensions.IsWeapon(item.Type, true) || ItemExtensions.IsThrowable(item.Type) && (pl.Config.ChopperPosWeapons != Vector3.zero)) spawn = pl.Config.ChopperPosWeapons;
+                        Log.Debug($"Coordinates choosed for {dropItems.Item} - {spawn}", pl.Config.Debug);
                         int r = random.Next(100);
-                        Log.Debug($"Preparing to spawn {dropItems.Quantity} {dropItems.Item}(s) with a {dropItems.Chance} chance for each one.", debug);
+                        Log.Debug($"Preparing to spawn {dropItems.Quantity} {dropItems.Item}(s) with a {dropItems.Chance} chance for each one.", pl.Config.Debug);
                         for (int i = 0; i < dropItems.Quantity; i++)
                         {
                             r = random.Next(100);
@@ -113,19 +87,19 @@ namespace SupplyDrop
                             {
                                 item.Spawn(spawn, default);
                                 spawned++;
-                                Log.Debug($"Spawning {dropItems.Item}. Luck - {r}/{dropItems.Chance}", debug);
+                                Log.Debug($"Spawning {dropItems.Item}. Luck - {r}/{dropItems.Chance}", pl.Config.Debug);
                             }
-                            else Log.Debug($"Item {dropItems.Item} didn't have enought luck.", debug);
+                            else Log.Debug($"Item {dropItems.Item} didn't have enought luck.", pl.Config.Debug);
                         }
-                        Log.Debug($"Spawned {spawned}/{dropItems.Quantity} {dropItems.Item}(s)", debug);
+                        Log.Debug($"Spawned {spawned}/{dropItems.Quantity} {dropItems.Item}(s)", pl.Config.Debug);
                     }
 
                     chopper_dropsNumber++;
-                    Log.Debug($"Drops used - {chopper_dropsNumber}/{chopper_dropLimit}", debug);
+                    Log.Debug($"Drops used - {chopper_dropsNumber}/{pl.Config.ChopperDropsLimit}", pl.Config.Debug);
                     yield return Timing.WaitForSeconds(15); // Wait 15 seconds to let the chopper leave.
                 }
                 else {
-                    if (chopper_dropsNumber == chopper_dropLimit) Log.Debug("Drops limit has been reached.", debug);
+                    if (chopper_dropsNumber == pl.Config.ChopperDropsLimit) Log.Debug("Drops limit has been reached.", pl.Config.Debug);
                     yield return Timing.WaitForSeconds(60); // Wait 60 seconds for more players.
                 }
             }
@@ -135,40 +109,40 @@ namespace SupplyDrop
         {
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(car_time_difference);
+                yield return Timing.WaitForSeconds(pl.Config.TimeDifference);
 
-                if ((Server.PlayerCount >= minPlayers) && ((car_dropLimit == -1) || (car_dropLimit > car_dropsNumber)))
+                if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.CarDropsLimit == -1) || (pl.Config.CarDropsLimit > car_dropsNumber)))
                 {
-                    yield return Timing.WaitForSeconds(car_time); // Wait seconds (10 minutes by default)
+                    yield return Timing.WaitForSeconds(pl.Config.CarTime); // Wait seconds (10 minutes by default)
                     Log.Info("Spawning car!");
 
                     RespawnEffectsController.ExecuteAllEffects(RespawnEffectsController.EffectType.Selection, SpawnableTeamType.ChaosInsurgency);
 
-                    Map.Broadcast(car_bcTime, car_dropText);
+                    Map.Broadcast(pl.Config.CarBroadcastTime, pl.Config.CarBroadcast);
 
                     yield return Timing.WaitForSeconds(15); // Wait 15 seconds
 
                     Vector3 spawn = Exiled.API.Extensions.RoleExtensions.GetRandomSpawnProperties(RoleType.ChaosRifleman).Item1;
 
 
-                    if (car_items == null)
+                    if (pl.Config.ChaosItems == null)
                     {
                         Log.Warn("ChaosItems config is null. Check your config for any errors.");
                         break;
                     }
 
                     System.Random random = Exiled.Loader.Loader.Random;
-                    foreach (var dropItems in car_items)
+                    foreach (var dropItems in pl.Config.ChaosItems)
                     {
                         int spawned = 0;
                         Item item = new Item(dropItems.Item);
-                        if (ItemExtensions.IsAmmo(item.Type) && (car_pos_ammo != Vector3.zero)) spawn = car_pos_ammo;
-                        if (ItemExtensions.IsArmor(item.Type) && (car_pos_armors != Vector3.zero)) spawn = car_pos_armors;
-                        if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (car_pos_items != Vector3.zero)) spawn = car_pos_items;
-                        if (ItemExtensions.IsWeapon(item.Type, true) || ItemExtensions.IsThrowable(item.Type) && (car_pos_weapons != Vector3.zero)) spawn = car_pos_weapons;
-                        Log.Debug($"Coordinates choosed for {dropItems.Item} - {spawn}", debug);
+                        if (ItemExtensions.IsAmmo(item.Type) && (pl.Config.CarPosAmmo != Vector3.zero)) spawn = pl.Config.CarPosAmmo;
+                        if (ItemExtensions.IsArmor(item.Type) && (pl.Config.CarPosArmors != Vector3.zero)) spawn = pl.Config.CarPosArmors;
+                        if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (pl.Config.CarPosItems != Vector3.zero)) spawn = pl.Config.CarPosItems;
+                        if (ItemExtensions.IsWeapon(item.Type, true) || ItemExtensions.IsThrowable(item.Type) && (pl.Config.CarPosWeapons != Vector3.zero)) spawn = pl.Config.CarPosWeapons;
+                        Log.Debug($"Coordinates choosed for {dropItems.Item} - {spawn}", pl.Config.Debug);
                         int r = random.Next(100);
-                        Log.Debug($"Preparing to spawn {dropItems.Quantity} {dropItems.Item}(s) with a {dropItems.Chance} chance for each one.", debug);
+                        Log.Debug($"Preparing to spawn {dropItems.Quantity} {dropItems.Item}(s) with a {dropItems.Chance} chance for each one.", pl.Config.Debug);
                         for (int i = 0; i < dropItems.Quantity; i++)
                         {
                             r = random.Next(100);
@@ -176,20 +150,20 @@ namespace SupplyDrop
                             {
                                 item.Spawn(spawn, default);
                                 spawned++;
-                                Log.Debug($"Spawning {dropItems.Item}. Luck - {r}/{dropItems.Chance}", debug);
+                                Log.Debug($"Spawning {dropItems.Item}. Luck - {r}/{dropItems.Chance}", pl.Config.Debug);
                             }
-                            else Log.Debug($"Item {dropItems.Item} didn't have enought luck.", debug);
+                            else Log.Debug($"Item {dropItems.Item} didn't have enought luck.", pl.Config.Debug);
                         }
-                        Log.Debug($"Spawned {spawned}/{dropItems.Quantity} {dropItems.Item}(s)", debug);
+                        Log.Debug($"Spawned {spawned}/{dropItems.Quantity} {dropItems.Item}(s)", pl.Config.Debug);
                     }
 
                     car_dropsNumber++;
-                    Log.Debug($"Drops used - {car_dropsNumber}/{car_dropLimit}", debug);
+                    Log.Debug($"Drops used - {car_dropsNumber}/{pl.Config.CarDropsLimit}", pl.Config.Debug);
                     yield return Timing.WaitForSeconds(15); // Wait 15 seconds to let the car leave.
                 }
                 else
                 {
-                    if (car_dropsNumber == car_dropLimit) Log.Debug("Drops limit has been reached.", debug);
+                    if (car_dropsNumber == pl.Config.CarDropsLimit) Log.Debug("Drops limit has been reached.", pl.Config.Debug);
                     yield return Timing.WaitForSeconds(60); // Wait 60 seconds for more players.
                 }
             }
