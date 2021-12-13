@@ -13,7 +13,7 @@ Supply Drop is an Exiled plugin that makes the chopper and car drop supplies at 
 **Step 4:** PROFIT!
 
 
-## Config
+## Config and Commands
 <details>
 <summary>Default Config</summary>
 
@@ -121,6 +121,17 @@ SD:
   debug: false
 ```
  
+</details>
+
+<details>
+<summary>Commands and Permissions</summary>
+
+| Command | Parameters | Permissions | Aliases |
+| --- | --- | --- | --- |
+| supplydrop | status/enable/disable/chopper/car | supplydrop.manage | sd |
+| spawncar | --- | supplydrop.spawncar | sd_spawncar, spawnchaosdrop |
+| spawnchopper | --- | supplydrop.spawnchopper | sd_spawnchopper, spawnmtfdrop |
+
 </details>
 
 ## Functionality & FAQ

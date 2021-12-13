@@ -13,7 +13,7 @@ namespace SupplyDrop
         public override Version Version { get; } = new Version(3, 0, 0);
         public override Version RequiredExiledVersion { get; } = new Version(4, 0, 0);
 
-        internal static SupplyDrop Singleton;
+        public static SupplyDrop Singleton;
 
         public EventHandlers EventHandlers;
 

@@ -17,6 +17,10 @@ namespace SupplyDrop
         private int chopper_dropsNumber = 0;
         private int car_dropsNumber = 0;
 
+        public static bool dropsEnabled = true;
+        public static bool chopperEnabled = true;
+        public static bool carEnabled = true;
+
         public List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
 
         internal void RoundStart()
@@ -35,13 +39,19 @@ namespace SupplyDrop
             foreach (CoroutineHandle handle in coroutines)
                 Timing.KillCoroutines(handle);
             coroutines.Clear();
+
         }
 
         public IEnumerator<float> ChopperThread()
         {
             while (Round.IsStarted)
             {
-                if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.ChopperDropsLimit == -1) || (pl.Config.ChopperDropsLimit > chopper_dropsNumber)))
+                if (!dropsEnabled || !chopperEnabled)
+                {
+                    Log.Debug("Canceled Chopper Supply Drop - Drops disabled.", pl.Config.Debug);
+                    yield return Timing.WaitForSeconds(120);
+                }
+                else if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.ChopperDropsLimit == -1) || (pl.Config.ChopperDropsLimit > chopper_dropsNumber)))
                 {
                     yield return Timing.WaitForSeconds(pl.Config.ChopperTime); // Wait seconds (10 minutes by default)
                     Log.Info("Spawning chopper!");
@@ -105,7 +115,12 @@ namespace SupplyDrop
             {
                 yield return Timing.WaitForSeconds(pl.Config.TimeDifference);
 
-                if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.CarDropsLimit == -1) || (pl.Config.CarDropsLimit > car_dropsNumber)))
+                if (!dropsEnabled || !carEnabled)
+                {
+                    Log.Debug("Canceled Car Supply Drop - Drops disabled.", pl.Config.Debug);
+                    yield return Timing.WaitForSeconds(120);
+                }
+                else if ((Server.PlayerCount >= pl.Config.MinPlayers) && ((pl.Config.CarDropsLimit == -1) || (pl.Config.CarDropsLimit > car_dropsNumber)))
                 {
                     yield return Timing.WaitForSeconds(pl.Config.CarTime); // Wait seconds (10 minutes by default)
                     Log.Info("Spawning car!");
