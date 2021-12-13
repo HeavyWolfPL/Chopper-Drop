@@ -126,6 +126,12 @@ SD:
 <details>
 <summary>Commands and Permissions</summary>
 
+| Command | Description |
+| --- | --- |
+| supplydrop | Enable or disable drops. You can also view their disabled status. |
+| spawnchopper | Force spawn a chopper drop. Ignores drops limit and disabled status. |
+| spawncar | Like the above, but with chaos car. |
+
 | Command | Parameters | Permissions | Aliases |
 | --- | --- | --- | --- |
 | supplydrop | status/enable/disable/chopper/car | supplydrop.manage | sd |
