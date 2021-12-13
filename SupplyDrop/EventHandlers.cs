@@ -1,17 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using MEC;
 using Respawning;
 using UnityEngine;
 using Map = Exiled.API.Features.Map;
-using Object = UnityEngine.Object;
 using ItemExtensions = Exiled.API.Extensions.ItemExtensions;
-using SupplyDrop.ConfigObjects;
 
 namespace SupplyDrop
 {

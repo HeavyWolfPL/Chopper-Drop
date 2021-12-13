@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 using SupplyDrop.ConfigObjects;
-using Exiled.API.Extensions;
 using UnityEngine;
 
 namespace SupplyDrop
