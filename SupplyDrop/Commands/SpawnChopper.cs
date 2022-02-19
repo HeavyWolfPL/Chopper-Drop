@@ -53,7 +53,7 @@ namespace SupplyDrop.Commands
                 foreach (var dropItems in SupplyDrop.Singleton.Config.MtfItems)
                 {
                     int spawned = 0;
-                    Item item = new Item(dropItems.Item);
+                    Item item = Item.Create(dropItems.Item);
                     if (ItemExtensions.IsAmmo(item.Type) && (SupplyDrop.Singleton.Config.ChopperPosAmmo != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.ChopperPosAmmo;
                     if (ItemExtensions.IsArmor(item.Type) && (SupplyDrop.Singleton.Config.ChopperPosArmors != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.ChopperPosArmors;
                     if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (SupplyDrop.Singleton.Config.ChopperPosItems != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.ChopperPosItems;

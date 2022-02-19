@@ -10,8 +10,8 @@ namespace SupplyDrop
         public override string Author { get; } = "Wafel, KadeDev, JesusQC";
         public override string Name { get; } = "SupplyDrop";
         public override string Prefix { get; } = "SD";
-        public override Version Version { get; } = new Version(3, 0, 0);
-        public override Version RequiredExiledVersion { get; } = new Version(4, 0, 0);
+        public override Version Version { get; } = new Version(3, 3, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
 
         public static SupplyDrop Singleton;
 

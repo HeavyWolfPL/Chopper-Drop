@@ -53,7 +53,7 @@ namespace SupplyDrop.Commands
                 foreach (var dropItems in SupplyDrop.Singleton.Config.ChaosItems)
                 {
                     int spawned = 0;
-                    Item item = new Item(dropItems.Item);
+                    Item item = Item.Create(dropItems.Item);
                     if (ItemExtensions.IsAmmo(item.Type) && (SupplyDrop.Singleton.Config.CarPosAmmo != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.CarPosAmmo;
                     if (ItemExtensions.IsArmor(item.Type) && (SupplyDrop.Singleton.Config.CarPosArmors != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.CarPosArmors;
                     if (ItemExtensions.IsKeycard(item.Type) || ItemExtensions.IsMedical(item.Type) || ItemExtensions.IsUtility(item.Type) || ItemExtensions.IsScp(item.Type) && (SupplyDrop.Singleton.Config.CarPosItems != Vector3.zero)) spawn = SupplyDrop.Singleton.Config.CarPosItems;
